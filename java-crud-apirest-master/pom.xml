@@ -8,37 +8,38 @@
 		<version>3.2.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.sergiecode.apirest</groupId>
+	<groupId>com.azuperalta.apirest</groupId>
 	<artifactId>apirest</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>apirest</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<!-- Cambia la versión de Java a 17 -->
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
+		<!-- Starter Data JPA incluye Hibernate -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+		<!-- Starter Web -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
+		<!-- PostgreSQL JDBC Driver -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		<!-- Starter Test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -47,5 +48,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
