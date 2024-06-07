@@ -3,62 +3,41 @@ package com.azuperalta.apirest.apirest.Controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.azuperalta.apirest.apirest.Entities.Comercio;
-import com.azuperalta.apirest.apirest.Repositories.ComercioRepository;
+import com.azuperalta.apirest.apirest.Services.ComercioService;
 
 @RestController
 @RequestMapping("/comercios")
-
 public class ComercioController {
 
     @Autowired
-    private ComercioRepository comercioRepository;
+    private ComercioService comercioService;
 
-    //Obtiene una lista con todos los productos.
     @GetMapping
-    public List<Comercio> getAllProductos() {
-        return comercioRepository.findAll();
+    public List<Comercio> getAllComercios() {
+        return comercioService.obtenerTodosLosComercios();
     }
 
-    //Get individual segun id 
     @GetMapping("/{id}")
-    public Comercio getProductoPorId(@PathVariable Long id){
-        return comercioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No se encontro el comercio con ID " + id));
+    public Comercio getComercioPorId(@PathVariable Long id) {
+        return comercioService.obtenerComercioPorId(id);
     }
 
     @PostMapping
-    public Comercio createComercio (@RequestBody Comercio comercioCreado) {
-        return comercioRepository.save(comercioCreado);
+    public Comercio createComercio(@RequestBody Comercio comercioCreado) {
+        return comercioService.crearComercio(comercioCreado);
     }
 
     @PutMapping("/{id}")
-    public Comercio updateComercio(@PathVariable Long id, @RequestBody Comercio detallesNuevoComercio){
-        Comercio comercio = comercioRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("No se encontro el comercio con ID " + id));
-
-        comercio.setNombreComercio(detallesNuevoComercio.getNombreComercio());
-        comercio.setDireccion(detallesNuevoComercio.getDireccion());
-
-        //.save actualiza base de datos
-        return comercioRepository.save(comercio);
+    public Comercio updateComercio(@PathVariable Long id, @RequestBody Comercio detallesNuevoComercio) {
+        return comercioService.actualizarComercio(id, detallesNuevoComercio);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteComercio(@PathVariable Long id){
-        Comercio comercio = comercioRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("No se encontro el comercio con ID " + id));
-
-        comercioRepository.delete(comercio);
+    public String deleteComercio(@PathVariable Long id) {
+        comercioService.eliminarComercio(id);
         return "El comercio con el ID: " + id + " fue eliminado correctamente";
     }
 }

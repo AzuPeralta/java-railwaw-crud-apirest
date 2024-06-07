@@ -3,63 +3,48 @@ package com.azuperalta.apirest.apirest.Controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.azuperalta.apirest.apirest.Repositories.ProductoRepository;
 import com.azuperalta.apirest.apirest.Entities.Producto;
+import com.azuperalta.apirest.apirest.Services.ProductoService;
+
 
 @RestController
 @RequestMapping("/productos")
-
 public class ProductoController {
 
     @Autowired
-    private ProductoRepository productoRepository;
+    private ProductoService productoService;
 
-    //Obtiene una lista con todos los productos.
+    // Obtener todos los productos
     @GetMapping
     public List<Producto> getAllProductos() {
-        return productoRepository.findAll();
+        return productoService.obtenerTodosLosProductos();
     }
 
-    //Get individual segun id 
+    // Obtener un producto por ID
     @GetMapping("/{id}")
     public Producto getProductoPorId(@PathVariable Long id){
-        return productoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No se encontro el producto con ID " + id));
+        return productoService.obtenerProductoPorId(id);
     }
 
+    // Crear un nuevo producto
     @PostMapping
     public Producto createProducto(@RequestBody Producto productoCreado) {
-        return productoRepository.save(productoCreado);
+        return productoService.crearProducto(productoCreado);
     }
 
+    // Actualizar un producto existente
     @PutMapping("/{id}")
     public Producto updateProducto(@PathVariable Long id, @RequestBody Producto detallesNuevoProducto){
-        Producto producto = productoRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("No se encontro el producto con ID " + id));
-
-        producto.setNombre(detallesNuevoProducto.getNombre());
-        producto.setPrecio(detallesNuevoProducto.getPrecio());
-
-        //.save actualiza base de datos
-        return productoRepository.save(producto);
+        return productoService.actualizarProducto(id, detallesNuevoProducto);
     }
 
+    // Eliminar un producto por ID
     @DeleteMapping("/{id}")
     public String deleteProducto(@PathVariable Long id){
-        Producto producto = productoRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("No se encontro el producto con ID " + id));
-
-        productoRepository.delete(producto);
+        productoService.eliminarProducto(id);
         return "El producto con el ID: " + id + " fue eliminado correctamente";
     }
+}
 
-};
