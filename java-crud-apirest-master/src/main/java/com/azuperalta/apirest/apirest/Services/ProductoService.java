@@ -20,17 +20,16 @@ public class ProductoService {
     public Producto crearProducto(Producto producto) {
         return productoRepository.save(producto);
     }
-
     public Producto actualizarProducto(Long id, Producto detallesNuevoProducto) {
-        Producto producto = productoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No se encontró el producto con ID " + id));
+        Producto productoExistente = productoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
-        producto.setNombre(detallesNuevoProducto.getNombre());
-        producto.setPrecio(detallesNuevoProducto.getPrecio());
+        productoExistente.setNombre(detallesNuevoProducto.getNombre());
+        productoExistente.setPrecio(detallesNuevoProducto.getPrecio());
+        // Actualiza otros campos según sea necesario
 
-        return productoRepository.save(producto);
+        return productoRepository.save(productoExistente);
     }
-
     public void eliminarProducto(Long id) {
         Producto producto = productoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No se encontró el producto con ID " + id));
